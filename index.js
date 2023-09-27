@@ -1,10 +1,64 @@
 let player = {
     name: "Tim",
-    chips: 200
+    chips: 200,
+    cards : [],
+    calculateCards : function() {
+        return this.cards.reduce( (previousValue, currentValue)=>
+        previousValue + currentValue, 0)
+    }
 }
-
-let cards = []
-let sum = 0
+let cards = [{
+    name : "2",
+    value : 2
+},
+{
+    name : "3",
+    value : 3
+},
+{
+    name : "4",
+    value : 4
+},
+{
+    name : "5",
+    value : 5
+},
+{
+    name : "6",
+    value : 6
+},
+{
+    name : "7",
+    value : 7
+},
+{
+    name : "8",
+    value : 8
+},
+{
+    name : "9",
+    value : 9
+},
+{
+    name : "10",
+    value : 10
+},
+{
+    name : "Ass",
+    value : 11
+},
+{
+    name : "Bube",
+    value : 10
+},
+{
+    name : "König",
+    value : 10
+},
+{
+    name : "Dame",
+    value : 10
+}]
 let hasBlackJack = false
 let isAlive = false
 let message = ""
@@ -17,29 +71,26 @@ playerEl.textContent = player.name + ": $" + player.chips
 
 function getRandomCard() {
     let randomNumber = Math.floor( Math.random()*13 ) + 1
-    if (randomNumber > 10) {
-        return 10
-    } else if (randomNumber === 1) {
-        return 11
-    } else {
-        return randomNumber
-    }
+    return cards[randomNumber].value
 }
 
 function startGame() {
     isAlive = true
     let firstCard = getRandomCard()
     let secondCard = getRandomCard()
-    cards = [firstCard, secondCard]
+    player.cards = [firstCard, secondCard]
     sum = firstCard + secondCard
     renderGame()
 }
 
 function renderGame() {
+    let sum = player.calculateCards()
     cardsEl.textContent = "Cards: "
-    for (let i = 0; i < cards.length; i++) {
-        cardsEl.textContent += cards[i] + " "
-    }
+ 
+
+    player.cards.map((card) => {
+        cardsEl.textContent += card + " "
+    })
     
     sumEl.textContent = "Sum: " + sum
     if (sum <= 20) {
@@ -58,8 +109,7 @@ function renderGame() {
 function newCard() {
     if (isAlive === true && hasBlackJack === false) {
         let card = getRandomCard()
-        sum += card
-        cards.push(card)
+        player.cards.push(card)
         renderGame()        
     }
 }
